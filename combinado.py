@@ -48,12 +48,12 @@ def promedio_estudiante(estudiantes:dict):
     estudiante = input("Ingrese el nombre del estudiante que desea ver el promedio: ").title().strip()
     if estudiante not in estudiantes:
         print("Error! el estudiante no existe")
+        return
     else:
         suma = sum(estudiantes[estudiante])
         largo = len(estudiantes[estudiante])
         promedio = suma/largo
-        return promedio
-
+        print(f"{estudiante} -> Promedio: {promedio}")
 
 
 while True:
@@ -66,8 +66,7 @@ while True:
         for e in estudiantes:
             print(e)
     elif opcion == 4:
-        promedio = promedio_estudiante(estudiantes)
-        print(f"{estudiante} -> Promedio: {promedio}")
+        promedio_estudiante(estudiantes)
     elif opcion == 5:
         if len(estudiantes) == 0:
             print("no hay estudiantes registrados")
@@ -79,5 +78,5 @@ while True:
                     promedito = sum(estudiante)/len(estudiante)
                     print(f"{estudiante} -> Promedio: {promedito}")
     else:
-        print("Chaitou")
+        print("Gracias por usar nuestros servicios, chaitou")
         break
