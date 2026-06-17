@@ -25,7 +25,7 @@ def validar_codigo_reserva(valor):
             return True
         return False
     return False
-# Falta verificar que sea único en la lista
+# ***Falta verificar que sea único en la lista
 
 def validar_nombre_solicitante(valor:str):
     if len(valor)>=5 and valor.isalpha():
@@ -58,18 +58,18 @@ def validar_horas_reserva(valor):
 
 def buscar_reserva(reservas,codigo_reserva):
     for posicion in range(len(reservas)):
-        if codigo_reserva[posicion]["codigo_reserva"] == codigo_reserva:
-            return posicion
-        return -1
+        if reservas[posicion]["codigo_reserva"] == codigo_reserva:
+            return posicion+1
+    return None
 
 # SOLICITUD Y VALIDACION DE LOS DATOS ANTES DE LA CREACION DEL DICCIONARIO
 def agregar_reserva(reservas:list):
     while True:
         codigo_reserva = input("Ingrese un código para su reserva (debe empezar con la letra 'R' y debe contener 7 caracteres): ")
-        if not validar_codigo_reserva:
+        if not validar_codigo_reserva(codigo_reserva):
             print("Error, código inválido")
             continue
-        if buscar_reserva(reservas, codigo_reserva) == -1:
+        if buscar_reserva(reservas, codigo_reserva) is not None:
             print("Error, el código ya fue registrado")
             continue
         break
@@ -103,8 +103,8 @@ def agregar_reserva(reservas:list):
         "codigo_reserva" : codigo_reserva,
         "nombre_solicitante" : nombre_solicitante,
         "tipo_sala" : tipo_sala,
-        "cantidad_personas" : cantidad_personas,
-        "horas_reserva" : horas_reserva,
+        "cantidad_personas" : int(cantidad_personas),
+        "horas_reserva" : int(horas_reserva),
         "estado" : False
     }
     # AGREGAR A LA LISTA
@@ -116,7 +116,7 @@ def agregar_reserva(reservas:list):
 # ELIMINAR RESERVA  -   PEDIR EL CODIGO DE RESERVA A ELIMINAR EN EL MENU
 def eliminar_reserva(reservas,codigo_reserva):
     posicion =  buscar_reserva(reservas, codigo_reserva)
-    if posicion == -1:
+    if posicion is None:
         print("Reserva no encontrada")
     else:
         reservas.pop(posicion)
@@ -125,10 +125,10 @@ def eliminar_reserva(reservas,codigo_reserva):
 # ACTUALIZAR CONFIRMACIONES
 def actualizar_confirmaciones(reservas):
     for reserva in reservas:
-        if reserva["cantidad_personas"] >= 10:
+        if int(reserva["cantidad_personas"]) >= 10:
             reserva["estado"] = True
         else:
-            reserva["estado"] == False
+            reserva["estado"] = False
     print("Estado actualizado correctamente")
 
 def mostrar_reservas(reservas:list):
@@ -145,10 +145,10 @@ while True:
         print("Buscar Reserva")
         codigo = input("Ingrese el código de la reserva que busca: ").title().strip()
         busqueda = buscar_reserva(reservas,codigo)
-        if busqueda == -1:
+        if busqueda is None:
             print("La reserva no existe")
         else:
-            print("Reserva encontrada")
+            print(f"Reserva encontrada en posición {busqueda}")
     elif opc==3:
         print("Eliminar Reserva")
         codigo = input("Ingrese el código de la reserva que desea eliminar: ")
