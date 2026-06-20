@@ -1,4 +1,4 @@
-# Cada prestamo deberá almacenarse como un registro independiente.
+# Cada prestamo deberá almacenarse como un registro independiente. un diccionario
 
 prestamos = []
 
@@ -22,17 +22,36 @@ def validar_opcion():
         except:
             print("Error, debe ingresar un número entero")
 
+def mostracion_prestamos(lista):
+    if not lista:
+        print("No hay prestamos registrados aún")
+        return
+    for prestamos in lista:
+        print(f"Código del préstamo: {prestamos["codigo_prestamo"]}")
+        print(f"Titulo del libro:    {prestamos["titulo_libro"]}")
+        print(f"Categoría:           {prestamos["categoria"]}")
+        print(f"Días de préstamo:    {prestamos["dias_prestamo"]}")
+        print(f"Multa pendiente:     {prestamos["multa_pendiente"]}")
+        print(f"Seguimiento:         {prestamos["seguimiento"]}")
+
 # Buscando buscando
 # Se busca por el código
 def el_busquedas(valor, lista):
-    if not lista:
-        print("No hay préstamos registrados aún")
-        return
     for posicion, prestamo in enumerate(lista):
         if prestamo["codigo_prestamo"] == valor:
             return posicion
-    return -1, 
-    
+    return -1
+
+# Eliminar préstamo
+# DEBE apoyarse en la función de búsqueda
+def eliminar_prestamo(lista):
+    codigo = input("Ingrese el código del préstamo que desea eliminar: ")
+    posicion = el_busquedas(codigo,lista)
+    if posicion!= -1:
+        lista.pop(posicion)
+        print("Préstamo aniquilado (¬_¬'')")
+    else:
+        print("Préstamo no encontrado")
 
 
 # VALIDACIONES
@@ -150,13 +169,19 @@ while True:
     if opc==1:
         registro_prestamo(prestamos)
     elif opc==2:
-        pass
+        codigo_a_buscar = input("Ingrese el código del préstamo que desea buscar: ")
+        posicion = el_busquedas(codigo_a_buscar, prestamos)
+        if posicion == -1:
+            print("Error, préstamo inexistente")
+        else:
+            print(f"El préstamo se encuentra en la posición {prestamos[posicion]} de la lista")
     elif opc==3:
-        pass
+        eliminar = input("Ingrese el código del préstamo que desea eliminar: ")
+        eliminar_prestamo(prestamos)
     elif opc==4:
-        pass
+        actualizacion_seguimiento(prestamos)
     elif opc==5:
-        pass
+        mostracion_prestamos(prestamos)
     elif opc==6:
         print("Sayonara")
         break
