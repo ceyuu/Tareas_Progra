@@ -27,12 +27,12 @@ def mostracion_prestamos(lista):
         print("No hay prestamos registrados aún")
         return
     for prestamos in lista:
-        print(f"Código del préstamo: {prestamos["codigo_prestamo"]}")
-        print(f"Titulo del libro:    {prestamos["titulo_libro"]}")
-        print(f"Categoría:           {prestamos["categoria"]}")
-        print(f"Días de préstamo:    {prestamos["dias_prestamo"]}")
-        print(f"Multa pendiente:     {prestamos["multa_pendiente"]}")
-        print(f"Seguimiento:         {prestamos["seguimiento"]}")
+        print("Código del préstamo:" ,prestamos["codigo_prestamo"])
+        print("Titulo del libro:"    ,prestamos["titulo_libro"])
+        print("Categoría:"           ,prestamos["categoria"])
+        print("Días de préstamo:"    ,prestamos["dias_prestamo"])
+        print("Multa pendiente:"     ,prestamos["multa_pendiente"])
+        print("Seguimiento:"         ,prestamos["seguimiento"])
 
 # Buscando buscando
 # Se busca por el código
@@ -56,12 +56,15 @@ def eliminar_prestamo(lista):
 
 # VALIDACIONES
 def validar_codigo_prestamo(valor,lista):
-    if valor[0]!= "P":
+    if len(valor) == 0:
+        return False, "Error, debe ingresar un código"
+    elif valor[0]!= "P":
         return False, "Error, el código debe comenzar con la letra 'P'"
-    elif len(valor)!=6 and " " in valor:
+    elif len(valor)!=6 or " " in valor:
         return False, "Error, el código debe tener exactamente 6 caracteres y no debe contener espacios"
+    
     for prestamo in lista:
-        if prestamo["codigo"]==valor:
+        if prestamo["codigo_prestamo"]==valor:
             return False, "Error, código ya registrado"
     return True, ""
 
@@ -77,20 +80,26 @@ def validar_titulo_libro(valor):
     return True, ""
 
 def validar_categoria(valor):
+    if len(valor) == 0:
+        return False, "Error, debe ingresar una categoría"
     if valor[0].upper() not in ("A","L","C"):
         return False, "Error, la categoría debe ser: Académico, Literatura o Ciencia"
     return True, ""
 
 def validar_dias_prestamo(valor):
+    if len(valor) == 0:
+        return False, "Error, debe ingresar un número"
     try:
         dias = int(valor)
-        if dias<1 and dias>30:
+        if dias<1 or dias>30:
             return False, "Error, debe ingresar un número entre 1 y 30"
         return True, ""
     except:
         return False, "Error, debe ingresar un número"
 
 def validar_multa_pendiente(valor):
+    if len(valor) == 0:
+        return False, "Error, debe ingresar un número"
     try:
         multa = int(valor)
         if multa < 0:
@@ -146,8 +155,8 @@ def registro_prestamo(lista):
         "codigo_prestamo" : codigo,
         "titulo_libro" : titulo_libro,
         "categoria" : categoria,
-        "dias_prestamo" : dias_prestamo,
-        "multa_pendiente" : multa_pendiente,
+        "dias_prestamo" : int(dias_prestamo),
+        "multa_pendiente" : int(multa_pendiente),
         "seguimiento" : False
     }
 
@@ -156,12 +165,15 @@ def registro_prestamo(lista):
 
 # actualización de seguimiento:
 def actualizacion_seguimiento(lista):
+    if len(lista) == 0:
+        print("No hay préstamos registrados aún")
+        return
     for prestamo in lista:
         if prestamo["multa_pendiente"] >= 5000:
             prestamo["seguimiento"] = True
-            print("Préstamos atualizados correctamente!")
         else:
             prestamo["seguimiento"] = False
+    print("Préstamos actualizados correctamente!")
 
 while True:
     mostrar_menu()
@@ -174,9 +186,8 @@ while True:
         if posicion == -1:
             print("Error, préstamo inexistente")
         else:
-            print(f"El préstamo se encuentra en la posición {prestamos[posicion]} de la lista")
+            print(f"El préstamo se encuentra en la posición {posicion} de la lista")
     elif opc==3:
-        eliminar = input("Ingrese el código del préstamo que desea eliminar: ")
         eliminar_prestamo(prestamos)
     elif opc==4:
         actualizacion_seguimiento(prestamos)
